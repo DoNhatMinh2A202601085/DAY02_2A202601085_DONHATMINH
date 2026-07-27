@@ -151,6 +151,48 @@
 
 ---
 
+# Go / Not Yet / No-Go Decision
+
+### **QUYẾT ĐỊNH: GO**
+
+```text
+[ GO ] — Tiến hành triển khai Prototype (Phase Pilot 2 tuần)
+```
+
+---
+
+## Lý do chi tiết (Decision Rationale)
+
+### 1. Vấn đề có thật, nỗi đau đủ lớn (Pain point & Value creation)
+* **Học viên:** Mất ~30 phút/sáng scroll qua hàng chục bài farm điểm để tìm bài chất lượng. 
+* **Mentor:** Mất thời gian đọc tuyến tính tất cả các bài post (kể cả bài kém chất lượng) để chấm điểm.
+* **Tác động:** Giúp học viên tiết kiệm **80–85% thời gian** (từ 30p xuống < 5p) và giảm **≥ 50% thời gian chấm điểm** cho mentor.
+
+### 2. Dữ liệu sẵn có & Rào cản kỹ thuật thấp (Feasibility & Data Availability)
+* **Data:** Dữ liệu text, link, reaction, timestamp trên Discord có sẵn 100%, dễ thu thập qua Discord API/Webhook.
+* **Ground Truth:** Đã có lịch sử chấm điểm cũ của Mentor để làm tập dữ liệu test/few-shot cho LLM.
+* **Complexity:** Bài toán xử lý ngôn ngữ tự nhiên (Phân loại + Tóm tắt + Ranking) nằm trong vùng mạnh nhất của các mô hình LLM hiện tại (GPT-4o-mini, Claude Haiku) với chi phí rất rẻ.
+
+### 3. Boundary & Human-in-the-loop rõ ràng (Risk Management)
+* **Không giao quyền quyết định tuyệt đối cho AI:** AI chỉ đóng vai trò **Pre-screen & Suggestion** (gửi Digest cho học viên, sắp xếp Priority Queue cho Mentor).
+* **Quyền kiểm soát thuộc về con người:** Mentor vẫn là người duyệt và chốt điểm cuối cùng, loại bỏ rủi ro AI chấm sai điểm của học viên (Zero risk về việc chấm nhầm điểm chính thức).
+* **Fallback đơn giản:** Nếu AI miss bài hay trong Digest, học viên vẫn có thể mở kênh gốc để scroll thủ công như bình thường.
+
+### 4. So sánh phương án vượt trội
+* **So với Rule-only:** Rule không xử lý được ngữ nghĩa bài viết (không biết bài nào thực sự sâu sắc, bài nào copy/farm chữ) và không giảm được workload đọc cho Mentor ngay lập tức.
+* **So với Agent:** Agent có nguy cơ gây phiền hà (spam bot reply), chi phí vận hành/infra cao hơn và overkill cho một quy trình tuyến tính lặp lại theo khung giờ cố định.
+* **Workflow:** Đạt điểm cân bằng tối ưu giữa **Chi phí – Tốc độ triển khai – Độ an toàn – Giá trị mang lại**.
+
+---
+
+## Điều kiện kiềm tỏa rủi ro (Guardrails for Pilot)
+
+Dù quyết định là **GO**, nhóm sẽ dừng dự án hoặc chuyển sang **Not Yet** nếu trong giai đoạn Pilot (2 tuần) vi phạm các ngưỡng sau:
+
+* **False Negative Rate > 10%:** Quá 10% số bài chất lượng cao (Mentor chấm > 7/10) bị AI gán nhãn "Farm" và bỏ sót khỏi Digest.
+* **Mentor Adoption Rate < 70%:** Mentor không sử dụng Pre-screen Dashboard do giao diện khó dùng hoặc gợi ý của AI không chính xác.
+* **Chi phí LLM API exceed budget:** Chi phí quét và tóm tắt hàng ngày vượt quá mức dự toán cho phép của dự án.
+
 # Problem Statement v1 (Refined after Rule/WF/Agent Analysis)
 
 | Field | Nội dung cập nhật |
@@ -184,3 +226,6 @@
 > 5. **Mentor Dashboard:** Simple web UI (Streamlit/Gradio) hiển thị priority queue, cho mentor override, log ground truth.
 > 6. **Iterate:** Cập nhật prompt weekly dựa trên false cases. Roll out toàn bộ batch sau 2 tuần pilot.
 > 7. **Monitor:** Dashboard metrics hàng tuần (time saved, digest recall, false neg rate).
+
+---
+
